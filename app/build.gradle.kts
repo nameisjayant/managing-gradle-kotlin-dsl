@@ -59,9 +59,33 @@ android {
         }
         create("staging") {
             signingConfig = signingConfigs["staging"]
-
+            // copy configuration from .debug build type
+            initWith(getByName("debug"))
+            applicationIdSuffix = ".staging"
+            versionNameSuffix = "-staging"
         }
     }
+
+    flavorDimensions += listOf("mode")
+
+    productFlavors {
+        create("free") {
+            dimension = "mode"
+            applicationIdSuffix = ".free"
+            versionNameSuffix = "-free"
+        }
+        create("paid") {
+            dimension = "mode"
+            applicationIdSuffix = ".paid"
+            versionNameSuffix = "-paid"
+        }
+
+//        create("minApi21"){
+//            dimension = "api"
+//            minSdk = 21
+//        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
