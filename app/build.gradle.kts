@@ -1,35 +1,49 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
 }
 
+val keyStorePropertyFile = rootProject.file("keystore.properties")
+val keyStoreProperty = Properties()
+keyStoreProperty.load(FileInputStream(keyStorePropertyFile))
+
 android {
     namespace = "com.nameisjayant.gradle"
     compileSdk = 33
 
     sourceSets {
-
+        getByName("main") {
+            java.srcDirs("/src/main/java")
+            res.srcDirs("src/main/res")
+        }
+        getByName("debug") {
+            kotlin.srcDirs("/src/main/kotlin")
+            res.srcDirs("src/main/res")
+        }
     }
 
     signingConfigs {
         getByName("debug") {
-            storeFile = file("/Users/jayantkumar/AndroidStudioProjects/gradle/app/keystore.jks")
-            keyAlias = "gradle"
-            keyPassword = "123456"
-            storePassword = "123456"
+            keyAlias = keyStoreProperty["keyAlias"] as String
+            storeFile = file(keyStoreProperty["keyStore"] as String)
+            keyPassword = keyStoreProperty["keyPassword"] as String
+            storePassword = keyStoreProperty["storePassword"] as String
         }
         create("release") {
-            storeFile = file("/Users/jayantkumar/AndroidStudioProjects/gradle/app/keystore.jks")
-            keyAlias = "gradle"
-            keyPassword = "123456"
-            storePassword = "123456"
+            keyAlias = keyStoreProperty["keyAlias"] as String
+            storeFile = file(keyStoreProperty["keyStore"] as String)
+            keyPassword = keyStoreProperty["keyPassword"] as String
+            storePassword = keyStoreProperty["storePassword"] as String
         }
         create("staging") {
-            storeFile = file("/Users/jayantkumar/AndroidStudioProjects/gradle/app/keystore.jks")
-            keyAlias = "gradle"
-            keyPassword = "123456"
-            storePassword = "123456"
+            keyAlias = keyStoreProperty["keyAlias"] as String
+            storeFile = file(keyStoreProperty["keyStore"] as String)
+            keyPassword = keyStoreProperty["keyPassword"] as String
+            storePassword = keyStoreProperty["storePassword"] as String
         }
     }
 
@@ -48,6 +62,7 @@ android {
 
     buildTypes {
         release {
+            buildConfigField("String", "BASE_URL", "https://www.prod.com/")
             signingConfig = signingConfigs["release"]
             isMinifyEnabled = false
             proguardFiles(
@@ -56,12 +71,14 @@ android {
             )
         }
         debug {
+            buildConfigField("String", "BASE_URL", "https://www.debug.com/")
             signingConfig = signingConfigs["debug"]
             isDebuggable = true
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
         }
         create("staging") {
+            buildConfigField("String", "BASE_URL", "https://www.staging.com/")
             signingConfig = signingConfigs["staging"]
             // copied configuration from .debug build type
             initWith(getByName("debug"))
