@@ -86,28 +86,36 @@ android {
             versionNameSuffix = "-staging"
         }
     }
-
-    flavorDimensions += listOf("version", "env")
-
     productFlavors {
         create("free") {
-            dimension = "version"
-            applicationIdSuffix = ".free"
-            versionNameSuffix = "-free"
+
         }
         create("paid") {
-            dimension = "version"
-            applicationIdSuffix = ".paid"
-            versionNameSuffix = "-paid"
-        }
 
-        create("dev") {
-            dimension = "env"
-        }
-        create("prod") {
-            dimension = "env"
         }
     }
+
+//    flavorDimensions += listOf("version", "env")
+//
+//    productFlavors {
+//        create("free") {
+//            dimension = "version"
+//            applicationIdSuffix = ".free"
+//            versionNameSuffix = "-free"
+//        }
+//        create("paid") {
+//            dimension = "version"
+//            applicationIdSuffix = ".paid"
+//            versionNameSuffix = "-paid"
+//        }
+//
+//        create("dev") {
+//            dimension = "env"
+//        }
+//        create("prod") {
+//            dimension = "env"
+//        }
+//    }
 
     androidComponents {
         beforeVariants { builder ->
@@ -154,4 +162,5 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+    implementation(project(":domain"))
 }

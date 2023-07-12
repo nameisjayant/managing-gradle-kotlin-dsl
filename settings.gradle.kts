@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "gradle"
 include(":app")
+include(":domain")

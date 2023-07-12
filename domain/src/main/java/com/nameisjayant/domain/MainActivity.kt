@@ -1,4 +1,4 @@
-package com.nameisjayant.gradle
+package com.nameisjayant.domain
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,10 +9,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.nameisjayant.domain.MainActivity
-import com.nameisjayant.gradle.ui.theme.GradleTheme
+import com.nameisjayant.domain.ui.theme.GradleTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,8 +22,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("")
-
+                    Greeting("Android")
                 }
             }
         }
