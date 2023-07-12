@@ -8,6 +8,10 @@ android {
     namespace = "com.nameisjayant.gradle"
     compileSdk = 33
 
+    sourceSets {
+
+    }
+
     signingConfigs {
         getByName("debug") {
             storeFile = file("/Users/jayantkumar/AndroidStudioProjects/gradle/app/keystore.jks")
@@ -59,31 +63,41 @@ android {
         }
         create("staging") {
             signingConfig = signingConfigs["staging"]
-            // copy configuration from .debug build type
+            // copied configuration from .debug build type
             initWith(getByName("debug"))
             applicationIdSuffix = ".staging"
             versionNameSuffix = "-staging"
         }
     }
 
-    flavorDimensions += listOf("mode")
+    flavorDimensions += listOf("version", "env")
 
     productFlavors {
         create("free") {
-            dimension = "mode"
+            dimension = "version"
             applicationIdSuffix = ".free"
             versionNameSuffix = "-free"
         }
         create("paid") {
-            dimension = "mode"
+            dimension = "version"
             applicationIdSuffix = ".paid"
             versionNameSuffix = "-paid"
         }
 
-//        create("minApi21"){
-//            dimension = "api"
-//            minSdk = 21
-//        }
+        create("dev") {
+            dimension = "env"
+        }
+        create("prod") {
+            dimension = "env"
+        }
+    }
+
+    androidComponents {
+        beforeVariants { builder ->
+            if (builder.productFlavors.containsAll(listOf("version" to "free", "env" to "dev"))) {
+                builder.enable = false
+            }
+        }
     }
 
     compileOptions {
