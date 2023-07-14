@@ -15,6 +15,10 @@ android {
     namespace = "com.nameisjayant.gradle"
     compileSdk = 33
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     sourceSets {
         getByName("main") {
             java.srcDirs("/src/main/java")
@@ -62,23 +66,23 @@ android {
 
     buildTypes {
         release {
-            buildConfigField("String", "BASE_URL", "https://www.prod.com/")
+            buildConfigField("String", "BASE_URL", "\"https://www.prod.com/\"")
             signingConfig = signingConfigs["release"]
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
         debug {
-            buildConfigField("String", "BASE_URL", "https://www.debug.com/")
+            buildConfigField("String", "BASE_URL", "\"https://www.dev.com/\"")
             signingConfig = signingConfigs["debug"]
             isDebuggable = true
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
+
         }
         create("staging") {
-            buildConfigField("String", "BASE_URL", "https://www.staging.com/")
+            buildConfigField("String", "BASE_URL", "\"https://www.staging.com/\"")
             signingConfig = signingConfigs["staging"]
             // copied configuration from .debug build type
             initWith(getByName("debug"))
@@ -86,12 +90,33 @@ android {
             versionNameSuffix = "-staging"
         }
     }
+    flavorDimensions += "version"
     productFlavors {
         create("free") {
-
+            dimension = "version"
+            applicationIdSuffix = ".free"
+            versionNameSuffix = "-free"
+            resValue("string", "flavour_name", "\"free\"")
+            //  applicationId = "com.nameisjayant.gradle"
         }
         create("paid") {
+            dimension = "version"
+            applicationIdSuffix = ".paid"
+            versionNameSuffix = "-paid"
+            resValue("string", "flavour_name", "\"paid]\"")
+            // applicationId = "com.nameisjayant.gradle"
+        }
+    }
 
+    applicationVariants.forEach { variant ->
+        if (variant.buildType.name == "release") {
+            variant.outputs.forEach { output ->
+                val fileName = output.outputFile.name
+                if (fileName.endsWith(".apk")) {
+                    val apkName = "${variant.productFlavors[0].name}-v${variant.versionName}.apk"
+                    output.outputFile.renameTo(File(output.outputFile.parent, apkName))
+                }
+            }
         }
     }
 
@@ -162,5 +187,6 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
-    implementation(project(":domain"))
+    //implementation(project(":domain"))
+    // "freeImplementation"(project(":domain"))
 }
