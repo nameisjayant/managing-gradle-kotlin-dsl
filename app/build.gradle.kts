@@ -7,13 +7,27 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.android)
 }
 
-val keyStorePropertyFile = rootProject.file("keystore.properties")
+val keyStorePropertyFile = rootProject.file("gradle.properties")
 val keyStoreProperty = Properties()
 keyStoreProperty.load(FileInputStream(keyStorePropertyFile))
 
 android {
     namespace = "com.nameisjayant.gradle"
     compileSdk = 33
+
+    defaultConfig {
+        applicationId = "com.nameisjayant.gradle"
+        minSdk = 24
+        targetSdk = 33
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
+    }
+
 
     buildFeatures {
         buildConfig = true
@@ -51,18 +65,6 @@ android {
         }
     }
 
-    defaultConfig {
-        applicationId = "com.nameisjayant.gradle"
-        minSdk = 24
-        targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
-    }
 
     buildTypes {
         release {
