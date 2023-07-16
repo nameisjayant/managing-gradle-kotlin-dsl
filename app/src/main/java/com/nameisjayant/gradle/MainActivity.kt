@@ -24,8 +24,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Greeting("")
-//                    stringResource(id = R.string.type)
-//                    stringResource(id = R.string.hey)
+                    stringResource(id = R.string.type)
+                    stringResource(id = R.string.flavour_name)
+                    BuildConfig.BASE_URL
                 }
             }
         }

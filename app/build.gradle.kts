@@ -105,7 +105,7 @@ android {
             dimension = "version"
             applicationIdSuffix = ".paid"
             versionNameSuffix = "-paid"
-            resValue("string", "flavour_name", "\"paid]\"")
+            resValue("string", "flavour_name", "\"paid\"")
             // applicationId = "com.nameisjayant.gradle"
         }
     }
