@@ -33,16 +33,6 @@ android {
         buildConfig = true
     }
 
-    sourceSets {
-        getByName("main") {
-            java.srcDirs("/src/main/java")
-            res.srcDirs("src/main/res")
-        }
-        getByName("debug") {
-            kotlin.srcDirs("/src/main/kotlin")
-            res.srcDirs("src/main/res")
-        }
-    }
 
     signingConfigs {
         getByName("debug") {
@@ -70,7 +60,9 @@ android {
         release {
             buildConfigField("String", "BASE_URL", "\"https://www.prod.com/\"")
             signingConfig = signingConfigs["release"]
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
@@ -122,6 +114,7 @@ android {
         }
     }
 
+
 //    flavorDimensions += listOf("version", "env")
 //
 //    productFlavors {
@@ -143,6 +136,17 @@ android {
 //            dimension = "env"
 //        }
 //    }
+
+    sourceSets {
+        getByName("free") {
+            java.srcDirs("src/free/java")
+            manifest.srcFile("src/free/AndroidManifest.xml")
+        }
+        getByName("paid") {
+            java.srcDirs("src/paid/java")
+            manifest.srcFile("src/paid/AndroidManifest.xml")
+        }
+    }
 
     androidComponents {
         beforeVariants { builder ->
@@ -189,6 +193,7 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+    "freeImplementation"(libs.ui.test.manifest)
     //implementation(project(":domain"))
     // "freeImplementation"(project(":domain"))
 }
